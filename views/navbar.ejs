@@ -1,0 +1,21 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">The Racketeer's Club</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+        <form action="/search" method="GET" id="search-form" class="form-inline">
+          <div class="form-group">
+            <select name="cat" class="form-control" id="cat">
+              <option value="player">Player</option>
+              <option value="team">Team</option>
+            </select>
+          </div>
+          <input type="text" id="member" placeholder="Search" name="memberSearch" />
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>

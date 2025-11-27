@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title> Badminton Club App </title>
+	<%- include ('head') %>
+</head>
+
+<body>
+
+	<%- include ('navbar') %>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<h1>Members</h1>
+				</div>
+				<div class="col-sm-12">
+					<% parsedData.forEach((member)=>{ %>
+						<div class="col-md-3 col-sm-4 poster text-center">
+
+							<a href="/member/<%= member.id %>">
+								<img src="<%= imageBaseUrl + member.name.charAt(0).toUpperCase() %>"
+									class="img-responsive" />
+								<p class="overview-header">
+									<%= member.name %>
+								</p>
+							</a>
+							<p class="overview">
+								<%= member.team %>
+							</p>
+						</div>
+						<% }) %>
+
+				</div>
+			</div>
+		</div>
+</body>
+
+</html>
