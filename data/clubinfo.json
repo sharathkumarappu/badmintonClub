@@ -8,12 +8,15 @@
       "gender": "Male",
       "level": "Expert",
       "type": "feather shuttle",
-      "dow": "Tuesday",
+      "dow": [
+        "Tuesday"
+      ],
       "registration_date": "01-01-2020",
       "memberHistory": [
-        "Racketeer's Club",
+        "The Racketeer's Club",
         "Lion's Club",
-        "Badminton Ams Club"
+        "Badminton Ams Club",
+        "Holland Badminton Academy"
       ]
     },
     {
@@ -24,10 +27,14 @@
       "gender": "Male",
       "level": "Intermediate",
       "type": "nylon shuttle",
-      "dow": "Tuesday, Friday",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
       "registration_date": "01-06-2000",
       "memberHistory": [
-        "Racketeer's Club",
+        "The Racketeer's Club",
+        "Smashing Badminton Academy",
         "Lion's Club",
         "Badminton Ams Club"
       ]
@@ -40,10 +47,13 @@
       "gender": "Female",
       "level": "Beginner",
       "type": "nylon shuttle",
-      "dow": "Tuesday, Friday",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
       "registration_date": "15-12-2015",
       "memberHistory": [
-        "Racketeer's Club",
+        "The Racketeer's Club",
         "Lion's Club",
         "Badminton Ams Club"
       ]
@@ -56,12 +66,14 @@
       "gender": "Male",
       "level": "Intermediate",
       "type": "nylon shuttle",
-      "dow": "Tuesday",
+      "dow": [
+        "Tuesday"
+      ],
       "registration_date": "05-01-2024",
       "memberHistory": [
-        "Racketeer's Club",
+        "The Racketeer's Club",
         "Lion's Club",
-        "Badminton Ams Club"
+        "Arnhem Club Badminton"
       ]
     },
     {
@@ -72,11 +84,14 @@
       "gender": "Male",
       "level": "Expert",
       "type": "feather shuttle",
-      "dow": "Tuesday, Friday",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
       "registration_date": "13-01-2021",
       "memberHistory": [
-        "Racketeer's Club",
-        "Lion's Club",
+        "The Racketeer's Club",
+        "Match Point Academy",
         "Badminton Ams Club"
       ]
     },
@@ -88,12 +103,14 @@
       "gender": "Male",
       "level": "Beginner",
       "type": "feather shuttle",
-      "dow": "Tuesday, Friday",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
       "registration_date": "01-08-2022",
       "memberHistory": [
-        "Racketeer's Club",
-        "Lion's Club",
-        "Badminton Ams Club"
+        "The Racketeer's Club",
+        "Lion's Club"
       ]
     },
     {
@@ -104,11 +121,12 @@
       "gender": "Male",
       "level": "Intermediate",
       "type": "nylon shuttle",
-      "dow": "Friday",
+      "dow": [
+        "Friday"
+      ],
       "registration_date": "11-03-2011",
       "memberHistory": [
-        "Racketeer's Club",
-        "Lion's Club",
+        "The Racketeer's Club",
         "Badminton Ams Club"
       ]
     },
@@ -120,11 +138,14 @@
       "gender": "Male",
       "level": "Intermediate",
       "type": "nylon shuttle",
-      "dow": "Tuesday, Friday",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
       "registration_date": "25-12-2019",
       "memberHistory": [
-        "Racketeer's Club",
-        "Lion's Club",
+        "The Racketeer's Club",
+        "Utrecht Badminton Club",
         "Badminton Ams Club"
       ]
     },
@@ -136,13 +157,30 @@
       "gender": "Female",
       "level": "Intermediate",
       "type": "nylon shuttle",
-      "dow": "Tuesday",
+      "dow": [
+        "Tuesday"
+      ],
       "registration_date": "01-10-2020",
       "memberHistory": [
-        "Racketeer's Club",
+        "The Racketeer's Club",
         "Lion's Club",
         "Badminton Ams Club"
       ]
+    },
+    {
+      "id": 1010,
+      "name": "Sharath",
+      "team": "RED",
+      "age": "30",
+      "gender": "Male",
+      "level": "Intermediate",
+      "type": "feather shuttle",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
+      "registration_date": "2025-11-06",
+      "memberHistory": []
     }
   ]
 }

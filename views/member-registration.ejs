@@ -1,0 +1,86 @@
+<%- include ('head') %>
+    </head>
+
+    <body>
+        <%- include ('navbar') %>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text-center">
+                        <h1 class="single-member-title">
+                            Member Registration Form
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="form-container">
+                <form class="form-group section-spacing" method="POST" action="/member-registration">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input name="name" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label>Team</label>
+                            <select name="team">
+                                <option>RED</option>
+                                <option>BLUE</option>
+                                <option>GREEN</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input name="age" type="number">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select name="gender">
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Level:</label>
+                            <select name="level" required>
+                                <option value="">--Select Level--</option>
+                                <option>Beginner</option>
+                                <option>Intermediate</option>
+                                <option>Expert</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Type:</label>
+                            <select name="type" required>
+                                <option value="">--Select Type--</option>
+                                <option value="feather shuttle">Feather Shuttle</option>
+                                <option value="nylon shuttle">Nylon Shuttle</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Days of Week:</label>
+                            <div style="padding: 8px 0;">
+                                <div>
+                                    <input type="checkbox" name="dow" value="Tuesday"> Tuesday
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="dow" value="Friday"> Friday
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group full">
+                            <label>Registration Date:</label>
+                            <input type="date" name="registration_date" required>
+                        </div>
+                        <div class="form-group full">
+                            <label>Member History</label>
+                            <textarea name="memberHistory" rows="4"></textarea>
+                        </div>
+                        <div class="full">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </body>
+
+    </html>
