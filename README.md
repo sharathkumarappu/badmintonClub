@@ -17,7 +17,6 @@ Simple Express.js sample application for managing a badminton club — members, 
 Open a terminal in the project root (`README.md` is in the repository root) and run:
 
 ```bat
-cd "c:\Users\pnl1di80\Documents\Express Sample App\badmintonClub"
 npm install
 ```
 
@@ -54,6 +53,3 @@ The app uses the default port configured by the generated `bin/www` script (comm
 
 **Contributing**
 - This is intended as a small sample; feel free to open PRs to improve docs, add tests, or add features (search, persistent storage).
-
-**License**
-- MIT-style (please add a `LICENSE` file if you intend to publish this project).
