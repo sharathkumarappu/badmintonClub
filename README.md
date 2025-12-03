@@ -47,6 +47,24 @@ The app uses the default port configured by the generated `bin/www` script (comm
 - To add members, update `data/clubinfo.json` or wire a persistence layer (database) and update the routing logic.
 - This project uses `helmet` and `morgan` for basic security and logging; adjust or extend middleware in `app.js` as needed.
 
+**Docker Containerization**
+
+Build and run the app in a Docker container:
+
+**Prerequisites**
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
+
+**Build the Docker image**
+```bash
+docker build -t badmintonclub:latest .
+```
+
+**Run a container**
+```bash
+docker run -p 3000:3000 --env PORT=3000 --rm badmintonclub:latest
+```
+The app will be available at `http://localhost:3000/`
+
 **Troubleshooting**
 - If `npm start` fails with an error about missing modules, run `npm install` again.
 - If the server starts but you see a blank page, check the console for template rendering errors and inspect `data/clubinfo.json` for valid JSON.
