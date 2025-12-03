@@ -1,0 +1,29 @@
+name: Build and Test Docker Image
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -t badmintonclub:latest .
+
+      # Optional: Run the container to test if it starts
+      - name: Run Docker container for test
+        run: |
+          docker run -d --name test-container -p 3000:3000 badmintonclub:latest
+          sleep 10
+          docker ps -a
+          docker logs test-container
+          docker stop test-container
+          docker rm test-container
