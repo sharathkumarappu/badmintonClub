@@ -14,18 +14,26 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       scriptSrc: [
         "'self'",
+        "'unsafe-inline'",
         "https://ajax.googleapis.com",
         "https://maxcdn.bootstrapcdn.com"
       ],
       styleSrc: [
         "'self'",
-        "https://maxcdn.bootstrapcdn.com"
+        "'unsafe-inline'",
+        "https://maxcdn.bootstrapcdn.com",
+        "https://fonts.googleapis.com"
       ],
       fontSrc: [
         "'self'",
-        "https://maxcdn.bootstrapcdn.com"
+        "https://maxcdn.bootstrapcdn.com",
+        "https://fonts.gstatic.com"
       ],
-      imgSrc: ["'self'", "https://loremflickr.com"]
+      imgSrc: ["'self'", "https://loremflickr.com"],
+      connectSrc: [
+        "'self'",
+        "https://maxcdn.bootstrapcdn.com"
+      ]
     }
   }
 }));

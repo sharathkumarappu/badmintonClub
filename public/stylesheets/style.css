@@ -110,3 +110,21 @@ a {
   width: 100%;
   border-radius: 5px;
 }
+
+/* Form Validation Error Messages */
+.error-message {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 4px;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}
+
+/* Required Field Indicator */
+.required-indicator {
+  color: #d32f2f;
+  margin-left: 4px;
+}

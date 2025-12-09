@@ -1,86 +1,98 @@
 <%- include ('head') %>
-    </head>
+</head>
 
-    <body>
-        <%- include ('navbar') %>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-8 col-sm-offset-2 text-center">
-                        <h1 class="single-member-title">
-                            Member Registration Form
-                        </h1>
+<body>
+    <%- include ('navbar') %>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 text-center">
+                <h1 class="single-member-title">
+                    Member Registration Form
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="form-container">
+        <form class="form-group section-spacing" method="POST" action="/member-registration" id="registrationForm" novalidate>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nameField">Name <span class="required-indicator">*</span></label>
+                    <input name="name" type="text" class="form-control" id="nameField" placeholder="Enter your name" value="<%= formData?.name || '' %>">
+                    <small class="error-message" id="nameError"><%= errors?.name %></small>
+                </div>
+                <div class="form-group">
+                    <label for="teamField">Team</label>
+                    <select name="team" id="teamField">
+                        <option value="RED" <%= formData?.team === 'RED' ? 'selected' : '' %>>RED</option>
+                        <option value="BLUE" <%= formData?.team === 'BLUE' ? 'selected' : '' %>>BLUE</option>
+                        <option value="GREEN" <%= formData?.team === 'GREEN' ? 'selected' : '' %>>GREEN</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ageField">Age <span class="required-indicator">*</span></label>
+                    <input name="age" type="number" class="form-control" id="ageField" placeholder="Enter your age" value="<%= formData?.age || '' %>">
+                    <small class="error-message" id="ageError"><%= errors?.age %></small>
+                </div>
+                <div class="form-group">
+                    <label for="genderField">Gender <span class="required-indicator">*</span></label>
+                    <select name="gender" id="genderField">
+                        <option value="">--Select Gender--</option>
+                        <option value="Male" <%= formData?.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                        <option value="Female" <%= formData?.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                        <option value="Others" <%= formData?.gender === 'Others' ? 'selected' : '' %>>Others</option>
+                    </select>
+                    <small class="error-message" id="genderError"><%= errors?.gender %></small>
+                </div>
+                <div class="form-group">
+                    <label for="levelField">Level <span class="required-indicator">*</span></label>
+                    <select name="level" id="levelField">
+                        <option value="">--Select Level--</option>
+                        <option value="Beginner" <%= formData?.level === 'Beginner' ? 'selected' : '' %>>Beginner</option>
+                        <option value="Intermediate" <%= formData?.level === 'Intermediate' ? 'selected' : '' %>>Intermediate</option>
+                        <option value="Expert" <%= formData?.level === 'Expert' ? 'selected' : '' %>>Expert</option>
+                    </select>
+                    <small class="error-message" id="levelError"><%= errors?.level %></small>
+                </div>
+                <div class="form-group">
+                    <label for="typeField">Type <span class="required-indicator">*</span></label>
+                    <select name="type" id="typeField">
+                        <option value="">--Select Type--</option>
+                        <option value="feather shuttle" <%= formData?.type === 'feather shuttle' ? 'selected' : '' %>>Feather Shuttle</option>
+                        <option value="nylon shuttle" <%= formData?.type === 'nylon shuttle' ? 'selected' : '' %>>Nylon Shuttle</option>
+                    </select>
+                    <small class="error-message" id="typeError"><%= errors?.type %></small>
+                </div>
+                <div class="form-group">
+                    <label>Days of Week <span class="required-indicator">*</span></label>
+                    <div style="padding: 8px 0;">
+                        <div>
+                            <input type="checkbox" name="dow" value="Tuesday" id="dowTuesday" <%= Array.isArray(formData?.dow) && formData.dow.includes('Tuesday') ? 'checked' : '' %>> 
+                            <label for="dowTuesday">Tuesday</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="dow" value="Friday" id="dowFriday" <%= Array.isArray(formData?.dow) && formData.dow.includes('Friday') ? 'checked' : '' %>> 
+                            <label for="dowFriday">Friday</label>
+                        </div>
                     </div>
+                    <small class="error-message" id="dowError"><%= errors?.dow %></small>
+                </div>
+                <div class="form-group full">
+                    <label for="registrationDateField">Registration Date <span class="required-indicator">*</span></label>
+                    <input type="date" name="registration_date" class="form-control" id="registrationDateField" value="<%= formData?.registration_date || '' %>">
+                    <small class="error-message" id="registrationDateError"><%= errors?.registration_date %></small>
+                </div>
+                <div class="form-group full">
+                    <label for="memberHistoryField">Member History</label>
+                    <textarea name="memberHistory" rows="4" id="memberHistoryField"><%= formData?.memberHistory || '' %></textarea>
+                </div>
+                <div class="full">
+                    <button type="submit">Submit</button>
                 </div>
             </div>
-            <div class="form-container">
-                <form class="form-group section-spacing" method="POST" action="/member-registration">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input name="name" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label>Team</label>
-                            <select name="team">
-                                <option>RED</option>
-                                <option>BLUE</option>
-                                <option>GREEN</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Age</label>
-                            <input name="age" type="number">
-                        </div>
-                        <div class="form-group">
-                            <label>Gender</label>
-                            <select name="gender">
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Others</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Level:</label>
-                            <select name="level" required>
-                                <option value="">--Select Level--</option>
-                                <option>Beginner</option>
-                                <option>Intermediate</option>
-                                <option>Expert</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Type:</label>
-                            <select name="type" required>
-                                <option value="">--Select Type--</option>
-                                <option value="feather shuttle">Feather Shuttle</option>
-                                <option value="nylon shuttle">Nylon Shuttle</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Days of Week:</label>
-                            <div style="padding: 8px 0;">
-                                <div>
-                                    <input type="checkbox" name="dow" value="Tuesday"> Tuesday
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="dow" value="Friday"> Friday
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group full">
-                            <label>Registration Date:</label>
-                            <input type="date" name="registration_date" required>
-                        </div>
-                        <div class="form-group full">
-                            <label>Member History</label>
-                            <textarea name="memberHistory" rows="4"></textarea>
-                        </div>
-                        <div class="full">
-                            <button type="submit">Submit</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-    </body>
+        </form>
+    </div>
 
-    </html>
+    <script src="/js/form-validation.js"></script>
+</body>
+
+</html>

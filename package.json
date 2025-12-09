@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -12,6 +16,7 @@
     "express": "^4.21.2",
     "helmet": "^8.1.0",
     "http-errors": "~1.6.3",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "@playwright/test": "^1.48.0"
   }
 }
