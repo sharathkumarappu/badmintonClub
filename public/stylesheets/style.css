@@ -123,6 +123,14 @@ a {
   display: block;
 }
 
+/* Input field with error state */
+.form-control.has-error,
+.form-group select.has-error,
+.form-group textarea.has-error {
+  border-color: #d32f2f;
+  background-color: #ffebee;
+}
+
 /* Required Field Indicator */
 .required-indicator {
   color: #d32f2f;

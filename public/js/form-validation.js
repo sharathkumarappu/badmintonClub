@@ -32,7 +32,10 @@ class FormValidator {
 
     // Add validation event listeners
     if (nameField) {
-      nameField.addEventListener('blur', () => this.validateField('name', nameField.value.trim() !== ''));
+      nameField.addEventListener('blur', () => {
+        const isValid = nameField.value.trim() !== '';
+        this.validateField('name', isValid);
+      });
       nameField.addEventListener('input', () => {
         if (nameField.value.trim() !== '') {
           this.hideError('name');
@@ -54,25 +57,29 @@ class FormValidator {
 
     if (genderField) {
       genderField.addEventListener('change', () => {
-        this.validateField('gender', genderField.value !== '');
+        const isValid = genderField.value !== '';
+        this.validateField('gender', isValid);
       });
     }
 
     if (levelField) {
       levelField.addEventListener('change', () => {
-        this.validateField('level', levelField.value !== '');
+        const isValid = levelField.value !== '';
+        this.validateField('level', isValid);
       });
     }
 
     if (typeField) {
       typeField.addEventListener('change', () => {
-        this.validateField('type', typeField.value !== '');
+        const isValid = typeField.value !== '';
+        this.validateField('type', isValid);
       });
     }
 
     if (registrationDateField) {
       registrationDateField.addEventListener('change', () => {
-        this.validateField('registrationDate', registrationDateField.value !== '');
+        const isValid = registrationDateField.value !== '';
+        this.validateField('registrationDate', isValid);
       });
     }
 
@@ -83,6 +90,9 @@ class FormValidator {
       };
       dowTuesday.addEventListener('change', checkDays);
       dowFriday.addEventListener('change', checkDays);
+      // Also validate on blur/focus loss
+      dowTuesday.addEventListener('blur', checkDays);
+      dowFriday.addEventListener('blur', checkDays);
     }
 
     // Form submission
@@ -126,8 +136,19 @@ class FormValidator {
   showError(fieldName) {
     const errorId = this.getErrorId(fieldName);
     const errorEl = document.getElementById(errorId);
+    const fieldEl = this.getFieldByName(fieldName);
+    
     if (errorEl) {
+      // Set default error message if empty
+      if (!errorEl.textContent.trim()) {
+        errorEl.textContent = this.getDefaultErrorMessage(fieldName);
+      }
       errorEl.classList.add('show');
+    }
+    
+    // Add error class to the input field for visual feedback
+    if (fieldEl) {
+      fieldEl.classList.add('has-error');
     }
   }
 
@@ -137,9 +158,33 @@ class FormValidator {
   hideError(fieldName) {
     const errorId = this.getErrorId(fieldName);
     const errorEl = document.getElementById(errorId);
+    const fieldEl = this.getFieldByName(fieldName);
+    
     if (errorEl) {
       errorEl.classList.remove('show');
     }
+    
+    // Remove error class from the input field
+    if (fieldEl) {
+      fieldEl.classList.remove('has-error');
+    }
+  }
+
+  /**
+   * Get field element by field name
+   */
+  getFieldByName(fieldName) {
+    const fieldMap = {
+      name: 'nameField',
+      age: 'ageField',
+      gender: 'genderField',
+      level: 'levelField',
+      type: 'typeField',
+      registrationDate: 'registrationDateField',
+      dow: 'dowTuesday' // Use first checkbox as reference
+    };
+    const fieldId = fieldMap[fieldName];
+    return fieldId ? document.getElementById(fieldId) : null;
   }
 
   /**
@@ -147,6 +192,22 @@ class FormValidator {
    */
   getErrorId(fieldName) {
     return `${fieldName}Error`;
+  }
+
+  /**
+   * Get default error message for a field
+   */
+  getDefaultErrorMessage(fieldName) {
+    const messages = {
+      name: 'Name is required',
+      age: 'Age is required and must be a valid positive number',
+      gender: 'Gender must be selected',
+      level: 'Level must be selected',
+      type: 'Type must be selected',
+      registrationDate: 'Registration date is required',
+      dow: 'At least one day of the week must be selected'
+    };
+    return messages[fieldName] || 'This field is required';
   }
 
   /**
@@ -222,10 +283,6 @@ class FormValidator {
 }
 
 // Initialize validation when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    new FormValidator('registrationForm');
-  });
-} else {
+document.addEventListener('DOMContentLoaded', () => {
   new FormValidator('registrationForm');
-}
+});
