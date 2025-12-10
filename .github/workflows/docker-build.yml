@@ -27,7 +27,7 @@ jobs:
           docker logs test-container
 
       - name: Restore original test data
-        run: docker exec test-container cp clubinfo.orig.json clubinfo.json
+        run: docker exec test-container cp data/clubinfo.orig.json data/clubinfo.json
 
       - name: Run Playwright tests
         run: docker exec test-container npm test
