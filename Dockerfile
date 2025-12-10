@@ -1,25 +1,30 @@
-FROM node:20-alpine
+# Use Debian-based Node image
+FROM node:20
 
 # Create app directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
+# Copy package files
 COPY package*.json ./
-
-# # Update package index and install CA certificates
-# RUN apk update && apk add --no-cache ca-certificates
 
 # Install app dependencies
 RUN npm install --production --loglevel verbose
 
-# Copy app sources
+# Install Playwright dependencies (official recommended list)
+RUN npx playwright install-deps
+
+# Install Playwright browsers (Chromium, Firefox, WebKit)
+RUN npx playwright install --with-deps
+
+# Copy application source code
 COPY . .
 
-# Expose default port (bin/www commonly uses 3000)
+# Expose application port
 EXPOSE 3000
 
-# Default env
+# Environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
 
+# Start the application
 CMD ["node", "./bin/www"]
