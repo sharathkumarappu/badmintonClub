@@ -112,6 +112,6 @@ test.describe('Error Handling Tests', () => {
   test('should display error page for 404', async ({ page }) => {
     await page.goto('/nonexistent-page');
     const content = await page.content();
-    expect(content).toContain('404');
+    expect(content).toContain('Not Found');
   });
 });
