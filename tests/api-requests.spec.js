@@ -9,9 +9,6 @@ test.describe('API Request-Response Tests', () => {
     context = await playwright.request.newContext({
       baseURL: 'http://localhost:3000',
     });
-    fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
-      console.log("API Test - clubinfo.json content:", jsonString);
-    });
   });
 
   test.afterAll(async () => {
