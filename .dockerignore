@@ -19,7 +19,4 @@ build
 out
 README.md
 TESTING.md
-tests
-playwright-report
-.playwright
 .npmrc
