@@ -17,6 +17,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Restore test data
+        run: cp data.json.orig data.json
+
       - name: Build Docker image
         run: docker build -t badmintonclub:latest .
 
@@ -26,7 +29,11 @@ jobs:
           sleep 5
           docker logs test-container
 
-          docker exec test-container npm test
+      - name: Restore original test data
+        run: docker exec test-container cp clubinfo.orig.json clubinfo.json
+
+      - name: Run Playwright tests
+        run: docker exec test-container npm test
 
       - name: Cleanup containers and images
         if: always()

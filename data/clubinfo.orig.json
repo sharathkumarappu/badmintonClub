@@ -1,0 +1,187 @@
+{
+  "members": [
+    {
+      "id": 1001,
+      "name": "Akshay",
+      "team": "RED",
+      "age": "25",
+      "gender": "Male",
+      "level": "Expert",
+      "type": "feather shuttle",
+      "dow": [
+        "Tuesday"
+      ],
+      "registration_date": "01-01-2020",
+      "memberHistory": [
+        "The Racketeer's Club",
+        "Lion's Club",
+        "Badminton Ams Club",
+        "Holland Badminton Academy"
+      ]
+    },
+    {
+      "id": 1002,
+      "name": "Bob",
+      "team": "BLUE",
+      "age": "70",
+      "gender": "Male",
+      "level": "Intermediate",
+      "type": "nylon shuttle",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
+      "registration_date": "01-06-2000",
+      "memberHistory": [
+        "The Racketeer's Club",
+        "Smashing Badminton Academy",
+        "Lion's Club",
+        "Badminton Ams Club"
+      ]
+    },
+    {
+      "id": 1003,
+      "name": "Catherine",
+      "team": "GREEN",
+      "age": "50",
+      "gender": "Female",
+      "level": "Beginner",
+      "type": "nylon shuttle",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
+      "registration_date": "15-12-2015",
+      "memberHistory": [
+        "The Racketeer's Club",
+        "Lion's Club",
+        "Badminton Ams Club"
+      ]
+    },
+    {
+      "id": 1004,
+      "name": "David",
+      "team": "RED",
+      "age": "40",
+      "gender": "Male",
+      "level": "Intermediate",
+      "type": "nylon shuttle",
+      "dow": [
+        "Tuesday"
+      ],
+      "registration_date": "05-01-2024",
+      "memberHistory": [
+        "The Racketeer's Club",
+        "Lion's Club",
+        "Arnhem Club Badminton"
+      ]
+    },
+    {
+      "id": 1005,
+      "name": "Eshwar",
+      "team": "BLUE",
+      "age": "25",
+      "gender": "Male",
+      "level": "Expert",
+      "type": "feather shuttle",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
+      "registration_date": "13-01-2021",
+      "memberHistory": [
+        "The Racketeer's Club",
+        "Match Point Academy",
+        "Badminton Ams Club"
+      ]
+    },
+    {
+      "id": 1006,
+      "name": "Faf",
+      "team": "GREEN",
+      "age": "18",
+      "gender": "Male",
+      "level": "Beginner",
+      "type": "feather shuttle",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
+      "registration_date": "01-08-2022",
+      "memberHistory": [
+        "The Racketeer's Club",
+        "Lion's Club"
+      ]
+    },
+    {
+      "id": 1007,
+      "name": "Gambhir",
+      "team": "RED",
+      "age": "40",
+      "gender": "Male",
+      "level": "Intermediate",
+      "type": "nylon shuttle",
+      "dow": [
+        "Friday"
+      ],
+      "registration_date": "11-03-2011",
+      "memberHistory": [
+        "The Racketeer's Club",
+        "Badminton Ams Club"
+      ]
+    },
+    {
+      "id": 1008,
+      "name": "Han",
+      "team": "BLUE",
+      "age": "30",
+      "gender": "Male",
+      "level": "Intermediate",
+      "type": "nylon shuttle",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
+      "registration_date": "25-12-2019",
+      "memberHistory": [
+        "The Racketeer's Club",
+        "Utrecht Badminton Club",
+        "Badminton Ams Club"
+      ]
+    },
+    {
+      "id": 1009,
+      "name": "Ian",
+      "team": "GREEN",
+      "age": "25",
+      "gender": "Female",
+      "level": "Intermediate",
+      "type": "nylon shuttle",
+      "dow": [
+        "Tuesday"
+      ],
+      "registration_date": "01-10-2020",
+      "memberHistory": [
+        "The Racketeer's Club",
+        "Lion's Club",
+        "Badminton Ams Club"
+      ]
+    },
+    {
+      "id": 1010,
+      "name": "Sharath",
+      "team": "RED",
+      "age": "30",
+      "gender": "Male",
+      "level": "Intermediate",
+      "type": "feather shuttle",
+      "dow": [
+        "Tuesday",
+        "Friday"
+      ],
+      "registration_date": "2025-11-06",
+      "memberHistory": [
+      ]
+    }
+  ]
+}
