@@ -18,12 +18,17 @@ jobs:
       - name: Build Docker image
         run: docker build -t badmintonclub:latest .
 
-      # Optional: Run the container to test if it starts
-      - name: Run Docker container for test
+      - name: Run Smoke Test and App Tests
         run: |
-          docker run -d --name test-container -p 3000:3000 badmintonclub:latest
-          sleep 10
-          docker ps -a
+          docker run -d --name test-container badmintonclub:latest
+          sleep 5
           docker logs test-container
-          docker stop test-container
-          docker rm test-container
+
+          docker exec test-container npm test
+
+      - name: Cleanup containers and images
+        if: always()
+        run: |
+          docker stop test-container || true
+          docker rm test-container || true
+          docker rmi badmintonclub:latest || true
