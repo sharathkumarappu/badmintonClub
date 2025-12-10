@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+const fs = require("fs");
 
 test.describe('API Request-Response Tests', () => {
   let context;
@@ -7,6 +8,9 @@ test.describe('API Request-Response Tests', () => {
     // Create a context for API requests
     context = await playwright.request.newContext({
       baseURL: 'http://localhost:3000',
+    });
+    fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
+      console.log("API Test - clubinfo.json content:", jsonString);
     });
   });
 
