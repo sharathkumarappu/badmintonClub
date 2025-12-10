@@ -13,10 +13,19 @@ router.use((req, res, next) => {
 /* GET home page. */
 router.get("/", function (req, res, next) {
   fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
-    const parsedData = JSON.parse(jsonString);
-    res.render("index", {
-      parsedData: parsedData.members,
-    });
+    if (err) {
+      console.error("Error reading clubinfo.json:", err);
+      return res.status(500).send("Internal Server Error");
+    }
+    try {
+      const parsedData = JSON.parse(jsonString);
+      res.render("index", {
+        parsedData: parsedData.members,
+      });
+    } catch (parseErr) {
+      console.error("Error parsing JSON:", parseErr);
+      return res.status(500).send("Internal Server Error");
+    }
   });
 });
 
@@ -24,13 +33,22 @@ router.get("/", function (req, res, next) {
 router.get("/member/:id", (req, res, next) => {
   const memberId = req.params.id;
   fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
-    const parsedData = JSON.parse(jsonString);
-    const member = parsedData.members.find((m) => m.id == memberId);
-    if (!member) {
-      console.log("Member not found:", memberId);
-      return res.status(404).send("Member not found.");
+    if (err) {
+      console.error("Error reading clubinfo.json:", err);
+      return res.status(500).send("Internal Server Error");
     }
-    res.render("single-member", { parsedData: member });
+    try {
+      const parsedData = JSON.parse(jsonString);
+      const member = parsedData.members.find((m) => m.id == memberId);
+      if (!member) {
+        console.log("Member not found:", memberId);
+        return res.status(404).send("Member not found.");
+      }
+      res.render("single-member", { parsedData: member });
+    } catch (parseErr) {
+      console.error("Error parsing JSON:", parseErr);
+      return res.status(500).send("Internal Server Error");
+    }
   });
 });
 
@@ -39,21 +57,38 @@ router.get("/search", (req, res, next) => {
   const cat = req.query.cat;
   const userSearchTerm = (req.query.memberSearch || "").toLowerCase();
   let filteredMembers = [];
-  fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
-    const parsedData = JSON.parse(jsonString);
-    if (cat === "player") {
-      filteredMembers = parsedData.members.filter((member) =>
-        member.name.toLowerCase().includes(userSearchTerm)
-      );
-    } else if (cat === "team") {
-      filteredMembers = parsedData.members.filter((member) =>
-        member.team.toLowerCase().includes(userSearchTerm)
-      );
-    }
+  
+  if (userSearchTerm.trim() !== "") {
+    fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
+      if (err) {
+        console.error("Error reading clubinfo.json:", err);
+        return res.status(500).send("Internal Server Error");
+      }
+      try {
+        const parsedData = JSON.parse(jsonString);
+        if (cat === "player") {
+          filteredMembers = parsedData.members.filter((member) =>
+            member.name.toLowerCase().includes(userSearchTerm)
+          );
+        } else if (cat === "team") {
+          filteredMembers = parsedData.members.filter((member) =>
+            member.team.toLowerCase().includes(userSearchTerm)
+          );
+        }
+        res.render("index", {
+          parsedData: filteredMembers,
+        });
+      } catch (parseErr) {
+        console.error("Error parsing JSON:", parseErr);
+        return res.status(500).send("Internal Server Error");
+      }
+    });
+  } else {
+    // If search term is empty, render with empty results
     res.render("index", {
       parsedData: filteredMembers,
     });
-  });
+  }
 });
 
 /* GET member registration page. */
@@ -89,14 +124,17 @@ router.post("/member-registration", (req, res, next) => {
   }
   const validDays = ["Tuesday", "Friday"];
   let daysOfWeek = [];
-  
+
   if (Array.isArray(formData.dow)) {
     daysOfWeek = formData.dow;
   } else if (formData.dow) {
-    daysOfWeek = formData.dow.split(',').map(d => d.trim()).filter(d => d);
+    daysOfWeek = formData.dow
+      .split(",")
+      .map((d) => d.trim())
+      .filter((d) => d);
   }
-  
-  const invalidDays = daysOfWeek.filter(day => !validDays.includes(day));
+
+  const invalidDays = daysOfWeek.filter((day) => !validDays.includes(day));
   if (daysOfWeek.length === 0) {
     errors.dow = "At least one day of the week must be selected";
   } else if (invalidDays.length > 0) {
@@ -109,7 +147,9 @@ router.post("/member-registration", (req, res, next) => {
   // If there are validation errors, re-render the form with error messages
   if (Object.keys(errors).length > 0) {
     console.log("Validation errors:", errors);
-    return res.status(400).render("member-registration", { errors: errors, formData: formData });
+    return res
+      .status(400)
+      .render("member-registration", { errors: errors, formData: formData });
   }
 
   // If validation passes, save the member
@@ -120,7 +160,13 @@ router.post("/member-registration", (req, res, next) => {
       return res.status(500).send("Internal Server Error");
     }
 
-    const parsedData = JSON.parse(jsonString);
+    let parsedData;
+    try {
+      parsedData = JSON.parse(jsonString);
+    } catch (parseErr) {
+      console.error("Error parsing JSON:", parseErr);
+      return res.status(500).send("Internal Server Error");
+    }
     let nextId = 1000;
     if (parsedData.members.length > 0) {
       const highestId = Math.max(
