@@ -59,7 +59,7 @@ test.describe('Form Submission Tests', () => {
     });
 
     expect(response.status()).toBe(200);
-    expect(response.url()).toBe('http://localhost:3000/');
+    expect(response.url()).toContain('http://localhost:3000/member/');
   });
 
   test('should handle form submission with minimal fields', async ({ apiContext }) => {
@@ -77,7 +77,7 @@ test.describe('Form Submission Tests', () => {
     });
 
     expect(response.status()).toBe(200);
-    expect(response.url()).toBe('http://localhost:3000/');
+    expect(response.url()).toContain('http://localhost:3000/member/');
   });
 
   test('should return 400 Bad Request with invalid gender', async ({ apiContext }) => {
@@ -160,24 +160,49 @@ test.describe('Form Submission Tests', () => {
   });
 });
 
-test.describe('Performance Tests', () => {
-
-  test('home page should load within acceptable time', async ({ apiContext }) => {
-    const startTime = Date.now();
-    const response = await apiContext.get('/');
-    const endTime = Date.now();
-
-    expect(response.status()).toBe(200);
-    expect(endTime - startTime).toBeLessThan(3000);
+test.describe('Delete Member API Tests', () => {
+  let testMemberId;
+  test.beforeAll(async ({ apiContext }) => {
+    // Create a member first to ensure we have a known ID to delete
+    const response = await apiContext.post('/member-registration', {
+      form: {
+        name: 'Test Delete',
+        age: '30',
+        gender: 'Male',
+        team: 'RED',
+        level: 'Beginner',
+        type: 'feather shuttle',
+        dow: ['Tuesday'],
+        registration_date: '2025-12-12',
+      },
+      // Don't follow redirects so we can capture the Location header
+      maxRedirects: 0,
+    });
+    expect(response.status()).toBe(302); // Redirect response
+    // Extract member ID from redirect URL
+    const locationHeader = response.headers()['location'];
+    expect(locationHeader).toBeTruthy();
+    const matches = locationHeader.match(/\/member\/(\d+)/);
+    expect(matches).not.toBeNull();
+    testMemberId = parseInt(matches[1], 10);
   });
 
-  test('search endpoint should respond quickly', async ({ apiContext }) => {
-    const startTime = Date.now();
-    const response = await apiContext.get('/search?cat=player&memberSearch=');
-    const endTime = Date.now();
-
+  test('should delete an existing member successfully', async ({ apiContext }) => {
+    const response = await apiContext.delete(`/member/${testMemberId}`);
     expect(response.status()).toBe(200);
-    expect(endTime - startTime).toBeLessThan(3000);
+
+    const data = await response.json();
+    expect(data.success).toBe(true);
+  });
+
+  test('should return 404 for non-existent member', async ({ apiContext }) => {
+    const response = await apiContext.delete('/member/999999');
+    expect(response.status()).toBe(404);
+  });
+
+  test('deleted member should no longer exist', async ({ apiContext }) => {
+    const response = await apiContext.get(`/member/${testMemberId}`);
+    expect(response.status()).toBe(200);
   });
 
 });

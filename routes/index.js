@@ -52,12 +52,45 @@ router.get("/member/:id", (req, res, next) => {
   });
 });
 
+/* DELETE member page. */
+router.delete("/member/:id", (req, res) => {
+  const memberId = parseInt(req.params.id, 10);
+  const filePath = path.join(__dirname, "../data/clubinfo.json");
+
+  fs.readFile(filePath, "utf8", (err, jsonString) => {
+    if (err) {
+      console.error("Error reading clubinfo.json:", err);
+      return res.status(500).send("Internal Server Error");
+    }
+    try {
+      const parsedData = JSON.parse(jsonString);
+      const updatedMembers = parsedData.members.filter(
+        (m) => m.id !== memberId
+      );
+      if (updatedMembers.length === parsedData.members.length) {
+        return res.status(404).send("Member not found.");
+      }
+      parsedData.members = updatedMembers;
+      fs.writeFile(filePath, JSON.stringify(parsedData, null, 2), (err) => {
+        if (err) {
+          console.error("Error writing clubinfo.json:", err);
+          return res.status(500).send("Internal Server Error");
+        }
+        res.json({ success: true });
+      });
+    } catch (parseErr) {
+      console.error("JSON Parse Error:", parseErr);
+      res.status(500).send("Internal Server Error");
+    }
+  });
+});
+
 /* GET search by query page. */
 router.get("/search", (req, res, next) => {
   const cat = req.query.cat;
   const userSearchTerm = (req.query.memberSearch || "").toLowerCase();
   let filteredMembers = [];
-  
+
   if (userSearchTerm.trim() !== "") {
     fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
       if (err) {

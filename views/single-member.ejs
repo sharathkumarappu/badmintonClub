@@ -29,7 +29,35 @@
 				<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
 					More Details
 				</button>
+
+				<button type="button" class="btn btn-danger btn-lg red-button delete-btn"
+					data-id="<%= parsedData.id %>">
+					Delete Member
+				</button>
+
 			</div>
+
+			<script>
+				document.addEventListener("DOMContentLoaded", () => {
+					const btn = document.querySelector(".delete-btn");
+
+					btn.addEventListener("click", () => {
+						const id = btn.dataset.id;
+
+						if (!confirm("Are you sure you want to delete this member?")) return;
+
+						fetch(`/member/${id}`, { method: 'DELETE' })
+							.then(res => res.json())
+							.then(data => {
+								if (data.success) {
+									window.location.href = '/'; // redirect manually
+								}
+							})
+							.catch(console.error);
+					});
+				});
+			</script>
+
 
 			<!-- Modal -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

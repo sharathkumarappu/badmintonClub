@@ -131,7 +131,7 @@ test.describe('Form Validation - Server-Side & Client-Side', () => {
       await page.getByText('Submit', { exact: true }).click();
       
       // Should redirect to home page on success
-      await expect(page).toHaveURL(/\/$/);
+      await expect(page).toHaveURL(/\/member\/\d+$/);
     });
   });
 

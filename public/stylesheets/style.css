@@ -136,3 +136,23 @@ a {
   color: #d32f2f;
   margin-left: 4px;
 }
+
+.red-button {
+  background-color: red;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.red-button:hover {
+  background-color: darkred;
+}
