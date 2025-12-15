@@ -162,9 +162,9 @@ test.describe('Form Submission Tests', () => {
 
 test.describe('Delete Member API Tests', () => {
   let testMemberId;
-  test.beforeAll(async ({ apiContext }) => {
+  test('should delete an existing member successfully', async ({ apiContext }) => {
     // Create a member first to ensure we have a known ID to delete
-    const response = await apiContext.post('/member-registration', {
+    let response = await apiContext.post('/member-registration', {
       form: {
         name: 'Test Delete',
         age: '30',
@@ -185,10 +185,8 @@ test.describe('Delete Member API Tests', () => {
     const matches = locationHeader.match(/\/member\/(\d+)/);
     expect(matches).not.toBeNull();
     testMemberId = parseInt(matches[1], 10);
-  });
 
-  test('should delete an existing member successfully', async ({ apiContext }) => {
-    const response = await apiContext.delete(`/member/${testMemberId}`);
+    response = await apiContext.delete(`/member/${testMemberId}`);
     expect(response.status()).toBe(200);
 
     const data = await response.json();
@@ -202,7 +200,7 @@ test.describe('Delete Member API Tests', () => {
 
   test('deleted member should no longer exist', async ({ apiContext }) => {
     const response = await apiContext.get(`/member/${testMemberId}`);
-    expect(response.status()).toBe(200);
+    expect(response.status()).toBe(404);
   });
 
 });
