@@ -232,7 +232,7 @@ router.post("/member-registration", (req, res, next) => {
         console.error("Error writing clubinfo.json:", err);
         return res.status(500).send("Internal Server Error");
       }
-      res.redirect("/");
+      res.redirect(`/member/${newMember.id}`);
     });
   });
 });
