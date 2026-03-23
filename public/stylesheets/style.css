@@ -1,6 +1,14 @@
 body {
   padding: 10px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
+    url("/icons/wallpaper.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 a {
@@ -15,6 +23,13 @@ a {
   width: 90%;
   text-align: center;
   margin: 10px 5% 10px;
+}
+
+.hero-banner {
+  width: 100%;
+  max-height: 380px;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
 #search-form input {
@@ -46,6 +61,13 @@ a {
 
 .section-spacing {
   margin-top: 50px;
+}
+
+.home-action-btn {
+  min-width: 200px;
+  padding: 16px 24px;
+  font-size: 20px;
+  margin: 8px;
 }
 
 .section {
@@ -155,4 +177,151 @@ a {
 
 .red-button:hover {
   background-color: darkred;
+}
+
+.attendance-toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.attendance-toolbar .form-control {
+  flex: 1;
+}
+
+.attendance-list {
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.attendance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.attendance-row:last-child {
+  border-bottom: none;
+}
+
+.attendance-name {
+  font-weight: 600;
+}
+
+.attendance-choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.attendance-choice label {
+  margin: 0;
+}
+
+.attendance-submit-wrap {
+  margin-top: 12px;
+}
+
+.presence-section {
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid #ddd;
+}
+
+.attendance-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1100;
+  min-width: 280px;
+  max-width: 420px;
+  margin: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.single-member-image {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  margin: 10px auto;
+  display: block;
+}
+
+.attendance-value {
+  word-break: break-word;
+}
+
+@media (max-width: 991px) {
+  .section-spacing {
+    margin-top: 25px;
+  }
+
+  .home-action-btn {
+    width: 100%;
+    max-width: 320px;
+    font-size: 18px;
+    margin: 6px auto;
+    display: block;
+  }
+
+  .poster {
+    margin-bottom: 15px;
+  }
+
+  #search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin: 8px 0;
+  }
+
+  #search-form .form-group,
+  #search-form #member,
+  #search-form #goSearch {
+    width: 100%;
+  }
+
+  #cat.form-control,
+  #search-form input {
+    width: 100%;
+    margin: 0;
+  }
+
+  .red-button {
+    position: static;
+    margin-top: 12px;
+    width: 100%;
+  }
+
+  .attendance-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .attendance-toolbar .btn,
+  .attendance-toolbar .form-control {
+    width: 100%;
+  }
+
+  .attendance-row {
+    padding: 10px;
+  }
+
+  .attendance-choice {
+    gap: 6px;
+  }
+
+  .attendance-toast {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    min-width: auto;
+    max-width: none;
+  }
 }

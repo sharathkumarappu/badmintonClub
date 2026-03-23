@@ -1,18 +1,18 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="/">The Racketeer's Club</a>
+      <a class="navbar-brand" href="/">Indian Badminton Club Arnhem</a>
     </div>
     <ul class="nav navbar-nav navbar-right">
       <li>
         <form action="/search" method="GET" id="search-form" class="form-inline">
           <div class="form-group">
-            <select name="cat" id="cat">
+            <select name="cat" id="cat" class="form-control">
               <option value="player">Player</option>
               <option value="team">Team</option>
             </select>
           </div>
-          <input type="text" id="member" placeholder="Search" name="memberSearch" />
+          <input type="text" id="member" class="form-control" placeholder="Search" name="memberSearch" />
           <button type="submit" id="goSearch" class="btn btn-primary">Go</button>
         </form>
       </li>

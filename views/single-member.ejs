@@ -1,5 +1,10 @@
-<%- include ('head') %>
-	</head>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title> Indian Badminton Club Arnhem </title>
+	<%- include ('head') %>
+</head>
 
 	<body>
 		<%- include ('navbar') %>
@@ -14,8 +19,7 @@
 							<%= `Level: ${parsedData.level} | Category: ${parsedData.type}` %>
 						</h3>
 
-
-						<img src="<%= imageBaseUrl + parsedData.name.charAt(0).toUpperCase() %>" />
+						<img src="/icons/profile_pic.png" class="single-member-image" />
 
 						<p class="overview-header">Member Info: <span class="single-member-overview">
 
@@ -35,6 +39,12 @@
 					Delete Member
 				</button>
 
+			</div>
+
+			<div class="col-sm-8 col-sm-offset-2 text-left section-spacing">
+				<p class="attendance-value"><strong>Recorded Attendance:</strong>
+					<%= Array.isArray(parsedData.attendance) && parsedData.attendance.length > 0 ? parsedData.attendance.join(", ") : "No dates recorded yet" %>
+				</p>
 			</div>
 
 			<script>
@@ -104,4 +114,4 @@
 
 	</body>
 
-	</html>
+</html>

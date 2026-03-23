@@ -16,13 +16,15 @@ app.use(helmet({
         "'self'",
         "'unsafe-inline'",
         "https://ajax.googleapis.com",
-        "https://maxcdn.bootstrapcdn.com"
+        "https://maxcdn.bootstrapcdn.com",
+        "https://cdn.jsdelivr.net"
       ],
       styleSrc: [
         "'self'",
         "'unsafe-inline'",
         "https://maxcdn.bootstrapcdn.com",
-        "https://fonts.googleapis.com"
+        "https://fonts.googleapis.com",
+        "https://cdn.jsdelivr.net"
       ],
       fontSrc: [
         "'self'",
@@ -47,6 +49,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'files')));
 
 app.use('/', indexRouter);
 

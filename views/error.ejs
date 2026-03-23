@@ -1,3 +1,18 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Error</title>
+	<%- include ('head') %>
+</head>
+
+<body>
+	<%- include ('navbar') %>
+	<div class="container section-spacing">
+		<h1><%= message %></h1>
+		<h2><%= error.status %></h2>
+		<pre style="white-space: pre-wrap;"><%= error.stack %></pre>
+	</div>
+</body>
+
+</html>

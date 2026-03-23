@@ -29,6 +29,46 @@ router.get("/", function (req, res, next) {
   });
 });
 
+/* GET members page. */
+router.get("/members", function (req, res, next) {
+  fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
+    if (err) {
+      console.error("Error reading clubinfo.json:", err);
+      return res.status(500).send("Internal Server Error");
+    }
+    try {
+      const parsedData = JSON.parse(jsonString);
+      res.render("members", {
+        parsedData: parsedData.members,
+      });
+    } catch (parseErr) {
+      console.error("Error parsing JSON:", parseErr);
+      return res.status(500).send("Internal Server Error");
+    }
+  });
+});
+
+/* GET attendance page. */
+router.get("/attendance", function (req, res, next) {
+  fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
+    if (err) {
+      console.error("Error reading clubinfo.json:", err);
+      return res.status(500).send("Internal Server Error");
+    }
+    try {
+      const parsedData = JSON.parse(jsonString);
+      const savedCount = Number.parseInt(req.query.saved, 10);
+      res.render("attendance", {
+        parsedData: parsedData.members,
+        savedCount: Number.isNaN(savedCount) ? null : savedCount,
+      });
+    } catch (parseErr) {
+      console.error("Error parsing JSON:", parseErr);
+      return res.status(500).send("Internal Server Error");
+    }
+  });
+});
+
 /* GET member page. */
 router.get("/member/:id", (req, res, next) => {
   const memberId = req.params.id;
@@ -108,7 +148,7 @@ router.get("/search", (req, res, next) => {
             member.team.toLowerCase().includes(userSearchTerm)
           );
         }
-        res.render("index", {
+        res.render("members", {
           parsedData: filteredMembers,
         });
       } catch (parseErr) {
@@ -118,7 +158,7 @@ router.get("/search", (req, res, next) => {
     });
   } else {
     // If search term is empty, render with empty results
-    res.render("index", {
+    res.render("members", {
       parsedData: filteredMembers,
     });
   }
@@ -218,6 +258,7 @@ router.post("/member-registration", (req, res, next) => {
       type: formData.type,
       dow: daysOfWeek,
       registration_date: formData.registration_date,
+      attendance: [],
       memberHistory:
         formData.memberHistory
           ?.split("\n")
@@ -233,6 +274,81 @@ router.post("/member-registration", (req, res, next) => {
         return res.status(500).send("Internal Server Error");
       }
       res.redirect(`/member/${newMember.id}`);
+    });
+  });
+});
+
+/* POST attendance data. */
+router.post("/attendance", (req, res) => {
+  const selectedDate = req.body.selectedDate;
+  const attendanceData = req.body.attendance;
+
+  if (!selectedDate || typeof selectedDate !== "string") {
+    return res.redirect("/attendance");
+  }
+
+  const normalizeSelected = (value) =>
+    value === "present" || value === "on" || value === true || value === "true";
+
+  const selectedFromNestedAttendance =
+    attendanceData && typeof attendanceData === "object" && !Array.isArray(attendanceData)
+      ? Object.keys(attendanceData).filter((memberId) =>
+          normalizeSelected(attendanceData[memberId])
+        )
+      : [];
+
+  const selectedFromBracketKeys = Object.keys(req.body)
+    .filter((key) => key.startsWith("attendance[") && normalizeSelected(req.body[key]))
+    .map((key) => key.replace("attendance[", "").replace("]", ""));
+
+  const selectedMemberIds = [...selectedFromNestedAttendance, ...selectedFromBracketKeys];
+
+  const uniqueSelectedMemberIds = [...new Set(selectedMemberIds)];
+
+  const filePath = path.join(__dirname, "../data/clubinfo.json");
+  fs.readFile(filePath, "utf8", (err, jsonString) => {
+    if (err) {
+      console.error("Error reading clubinfo.json:", err);
+      return res.status(500).send("Internal Server Error");
+    }
+
+    let parsedData;
+    try {
+      parsedData = JSON.parse(jsonString);
+    } catch (parseErr) {
+      console.error("Error parsing JSON:", parseErr);
+      return res.status(500).send("Internal Server Error");
+    }
+
+    parsedData.members = parsedData.members.map((member) => {
+      const memberId = String(member.id);
+      const attendanceList = Array.isArray(member.attendance)
+        ? [...member.attendance]
+        : [];
+
+      if (uniqueSelectedMemberIds.includes(memberId)) {
+        if (!attendanceList.includes(selectedDate)) {
+          attendanceList.push(selectedDate);
+        }
+      } else {
+        const dateIndex = attendanceList.indexOf(selectedDate);
+        if (dateIndex !== -1) {
+          attendanceList.splice(dateIndex, 1);
+        }
+      }
+
+      return {
+        ...member,
+        attendance: attendanceList,
+      };
+    });
+
+    fs.writeFile(filePath, JSON.stringify(parsedData, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error("Error writing clubinfo.json:", writeErr);
+        return res.status(500).send("Internal Server Error");
+      }
+      return res.redirect(`/attendance?saved=${uniqueSelectedMemberIds.length}`);
     });
   });
 });
