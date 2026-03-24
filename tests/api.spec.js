@@ -4,14 +4,7 @@ test.describe('Home Page API Tests', () => {
   test('GET / should return 200 and render HTML', async ({ page }) => {
     const response = await page.goto('/');
     expect(response.status()).toBe(200);
-    await expect(page).toHaveTitle(/Badminton Club/i);
-  });
-
-  test('GET / should display members list', async ({ page }) => {
-    await page.goto('/');
-    // Check if members are displayed (adjust selectors based on your HTML)
-    const memberElements = await page.locator('div#membersGrid>div').count();
-    expect(memberElements).toBeGreaterThan(0);
+    await expect(page).toHaveTitle(/Indian Badminton Club Arnhem/i);
   });
 
   test('GET / should contain navigation', async ({ page }) => {
@@ -21,10 +14,19 @@ test.describe('Home Page API Tests', () => {
   });
 });
 
+test.describe('Members Page API Tests', () => {
+  test('GET /members should display members list', async ({ page }) => {
+    await page.goto('/members');
+    // Check if members are displayed (adjust selectors based on your HTML)
+    const memberElements = await page.locator('div#membersGrid>div').count();
+    expect(memberElements).toBeGreaterThan(0);
+  });
+});
+
 test.describe('Member Details API Tests', () => {
   test('GET /member/:id should return member details for valid ID', async ({ page }) => {
-    // First, get the home page to find a member ID
-    await page.goto('/');
+    // First, get the members page to find a member ID
+    await page.goto('/members');
     
     // Click on a member (adjust selector based on your HTML structure)
     const firstMemberLink = page.locator('a[href*="/member/"]').first();

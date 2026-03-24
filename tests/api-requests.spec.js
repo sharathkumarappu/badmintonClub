@@ -52,14 +52,15 @@ test.describe('Form Submission Tests', () => {
         team: 'RED',
         level: 'Intermediate',
         type: 'feather shuttle',
-        dow: ['Tuesday', 'Friday'],
+        dow: 'Tuesday,Friday',
         registration_date: '2025-12-09',
         memberHistory: 'Played since 2020\nMultiple tournament wins',
       },
+      maxRedirects: 0,
     });
 
-    expect(response.status()).toBe(200);
-    expect(response.url()).toContain('http://localhost:3000/member/');
+    expect(response.status()).toBe(302);
+    expect(response.headers()['location']).toContain('/member/');
   });
 
   test('should handle form submission with minimal fields', async ({ apiContext }) => {
@@ -74,10 +75,11 @@ test.describe('Form Submission Tests', () => {
         dow: 'Friday',
         registration_date: '2025-12-09',
       },
+      maxRedirects: 0,
     });
 
-    expect(response.status()).toBe(200);
-    expect(response.url()).toContain('http://localhost:3000/member/');
+    expect(response.status()).toBe(302);
+    expect(response.headers()['location']).toContain('/member/');
   });
 
   test('should return 400 Bad Request with invalid gender', async ({ apiContext }) => {

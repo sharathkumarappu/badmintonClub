@@ -231,27 +231,28 @@ test.describe('Form Validation - Server-Side & Client-Side', () => {
       const testName = `Member ${Date.now()}`;
       
       const response = await request.post('/member-registration', {
-        data: {
+        form: {
           name: testName,
           team: 'RED',
           age: '32',
           gender: 'Male',
           level: 'Intermediate',
           type: 'feather shuttle',
-          dow: ['Tuesday', 'Friday'],
+          dow: 'Tuesday,Friday',
           registration_date: '2024-01-15',
           memberHistory: 'Active member'
-        }
+        },
+        maxRedirects: 0,
       });
       
-      expect(response.status()).toBe(200); // Successful submission redirects (302)
+      expect(response.status()).toBe(302); // Successful submission redirects
       
-      // Should redirect to home page
-      const finalUrl = response.url();
-      expect(finalUrl).toContain('/');
+      // Should redirect to member page
+      const location = response.headers()['location'];
+      expect(location).toContain('/member/');
       
-      // Navigate to home and verify member was added
-      await page.goto('/');
+      // Navigate to members page and verify member was added
+      await page.goto('/members');
       // Check if new member appears in the list
       await expect(page.locator('body')).toContainText(testName);
     });
