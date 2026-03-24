@@ -10,13 +10,15 @@
     "test:headed": "playwright test --headed"
   },
   "dependencies": {
+    "@playwright/test": "^1.48.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^17.3.1",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "helmet": "^8.1.0",
     "http-errors": "~1.6.3",
-    "morgan": "^1.10.1",
-    "@playwright/test": "^1.48.0"
+    "mongodb": "^7.1.1",
+    "morgan": "^1.10.1"
   }
 }

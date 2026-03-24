@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const fs = require("fs");
-const path = require("path");
+const connectDB = require('./db');
 
 const imageBaseUrl = "https://loremflickr.com/300/450/letter";
 
@@ -11,151 +10,108 @@ router.use((req, res, next) => {
 });
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
-    if (err) {
-      console.error("Error reading clubinfo.json:", err);
-      return res.status(500).send("Internal Server Error");
-    }
-    try {
-      const parsedData = JSON.parse(jsonString);
-      res.render("index", {
-        parsedData: parsedData.members,
-      });
-    } catch (parseErr) {
-      console.error("Error parsing JSON:", parseErr);
-      return res.status(500).send("Internal Server Error");
-    }
-  });
+router.get("/", async function (req, res, next) {
+  try {
+    const db = await connectDB();
+    const members = await db.collection('member_info').find().toArray();
+    res.render("index", {
+      parsedData: members,
+    });
+  } catch (err) {
+    console.error("Error fetching members:", err);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 /* GET members page. */
-router.get("/members", function (req, res, next) {
-  fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
-    if (err) {
-      console.error("Error reading clubinfo.json:", err);
-      return res.status(500).send("Internal Server Error");
-    }
-    try {
-      const parsedData = JSON.parse(jsonString);
-      res.render("members", {
-        parsedData: parsedData.members,
-      });
-    } catch (parseErr) {
-      console.error("Error parsing JSON:", parseErr);
-      return res.status(500).send("Internal Server Error");
-    }
-  });
+router.get("/members", async function (req, res, next) {
+  try {
+    const db = await connectDB();
+    const members = await db.collection('member_info').find().toArray();
+    res.render("members", {
+      parsedData: members,
+    });
+  } catch (err) {
+    console.error("Error fetching members:", err);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 /* GET attendance page. */
-router.get("/attendance", function (req, res, next) {
-  fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
-    if (err) {
-      console.error("Error reading clubinfo.json:", err);
-      return res.status(500).send("Internal Server Error");
-    }
-    try {
-      const parsedData = JSON.parse(jsonString);
-      const savedCount = Number.parseInt(req.query.saved, 10);
-      res.render("attendance", {
-        parsedData: parsedData.members,
-        savedCount: Number.isNaN(savedCount) ? null : savedCount,
-      });
-    } catch (parseErr) {
-      console.error("Error parsing JSON:", parseErr);
-      return res.status(500).send("Internal Server Error");
-    }
-  });
+router.get("/attendance", async function (req, res, next) {
+  try {
+    const db = await connectDB();
+    const members = await db.collection('member_info').find().toArray();
+    const savedCount = Number.parseInt(req.query.saved, 10);
+    res.render("attendance", {
+      parsedData: members,
+      savedCount: Number.isNaN(savedCount) ? null : savedCount,
+    });
+  } catch (err) {
+    console.error("Error fetching members:", err);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 /* GET member page. */
-router.get("/member/:id", (req, res, next) => {
-  const memberId = req.params.id;
-  fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
-    if (err) {
-      console.error("Error reading clubinfo.json:", err);
-      return res.status(500).send("Internal Server Error");
+router.get("/member/:id", async (req, res, next) => {
+  const memberId = parseInt(req.params.id, 10);
+  try {
+    const db = await connectDB();
+    const member = await db.collection('member_info').findOne({ id: memberId });
+    if (!member) {
+      console.log("Member not found:", memberId);
+      return res.status(404).send("Member not found.");
     }
-    try {
-      const parsedData = JSON.parse(jsonString);
-      const member = parsedData.members.find((m) => m.id == memberId);
-      if (!member) {
-        console.log("Member not found:", memberId);
-        return res.status(404).send("Member not found.");
-      }
-      res.render("single-member", { parsedData: member });
-    } catch (parseErr) {
-      console.error("Error parsing JSON:", parseErr);
-      return res.status(500).send("Internal Server Error");
-    }
-  });
+    res.render("single-member", { parsedData: member });
+  } catch (err) {
+    console.error("Error fetching member:", err);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 /* DELETE member page. */
-router.delete("/member/:id", (req, res) => {
+router.delete("/member/:id", async (req, res) => {
   const memberId = parseInt(req.params.id, 10);
-  const filePath = path.join(__dirname, "../data/clubinfo.json");
-
-  fs.readFile(filePath, "utf8", (err, jsonString) => {
-    if (err) {
-      console.error("Error reading clubinfo.json:", err);
-      return res.status(500).send("Internal Server Error");
+  try {
+    const db = await connectDB();
+    const result = await db.collection('member_info').deleteOne({ id: memberId });
+    if (result.deletedCount === 0) {
+      return res.status(404).send("Member not found.");
     }
-    try {
-      const parsedData = JSON.parse(jsonString);
-      const updatedMembers = parsedData.members.filter(
-        (m) => m.id !== memberId
-      );
-      if (updatedMembers.length === parsedData.members.length) {
-        return res.status(404).send("Member not found.");
-      }
-      parsedData.members = updatedMembers;
-      fs.writeFile(filePath, JSON.stringify(parsedData, null, 2), (err) => {
-        if (err) {
-          console.error("Error writing clubinfo.json:", err);
-          return res.status(500).send("Internal Server Error");
-        }
-        res.json({ success: true });
-      });
-    } catch (parseErr) {
-      console.error("JSON Parse Error:", parseErr);
-      res.status(500).send("Internal Server Error");
-    }
-  });
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error deleting member:", err);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 /* GET search by query page. */
-router.get("/search", (req, res, next) => {
+router.get("/search", async (req, res, next) => {
   const cat = req.query.cat;
   const userSearchTerm = (req.query.memberSearch || "").toLowerCase();
   let filteredMembers = [];
 
   if (userSearchTerm.trim() !== "") {
-    fs.readFile("./data/clubinfo.json", "utf8", (err, jsonString) => {
-      if (err) {
-        console.error("Error reading clubinfo.json:", err);
-        return res.status(500).send("Internal Server Error");
+    try {
+      const db = await connectDB();
+      const members = await db.collection('member_info').find().toArray();
+      if (cat === "player") {
+        filteredMembers = members.filter((member) =>
+          member.name.toLowerCase().includes(userSearchTerm)
+        );
+      } else if (cat === "team") {
+        filteredMembers = members.filter((member) =>
+          member.team.toLowerCase().includes(userSearchTerm)
+        );
       }
-      try {
-        const parsedData = JSON.parse(jsonString);
-        if (cat === "player") {
-          filteredMembers = parsedData.members.filter((member) =>
-            member.name.toLowerCase().includes(userSearchTerm)
-          );
-        } else if (cat === "team") {
-          filteredMembers = parsedData.members.filter((member) =>
-            member.team.toLowerCase().includes(userSearchTerm)
-          );
-        }
-        res.render("members", {
-          parsedData: filteredMembers,
-        });
-      } catch (parseErr) {
-        console.error("Error parsing JSON:", parseErr);
-        return res.status(500).send("Internal Server Error");
-      }
-    });
+      res.render("members", {
+        parsedData: filteredMembers,
+      });
+    } catch (err) {
+      console.error("Error searching members:", err);
+      return res.status(500).send("Internal Server Error");
+    }
   } else {
     // If search term is empty, render with empty results
     res.render("members", {
@@ -170,7 +126,7 @@ router.get("/member-registration", (req, res) => {
 });
 
 /* POST member registration form data. */
-router.post("/member-registration", (req, res, next) => {
+router.post("/member-registration", async (req, res, next) => {
   const formData = req.body;
   const errors = {};
   if (!formData.name || formData.name.trim() === "") {
@@ -226,26 +182,12 @@ router.post("/member-registration", (req, res, next) => {
   }
 
   // If validation passes, save the member
-  const filePath = path.join(__dirname, "../data/clubinfo.json");
-  fs.readFile(filePath, "utf8", (err, jsonString) => {
-    if (err) {
-      console.error("Error reading clubinfo.json:", err);
-      return res.status(500).send("Internal Server Error");
-    }
-
-    let parsedData;
-    try {
-      parsedData = JSON.parse(jsonString);
-    } catch (parseErr) {
-      console.error("Error parsing JSON:", parseErr);
-      return res.status(500).send("Internal Server Error");
-    }
+  try {
+    const db = await connectDB();
+    const maxMember = await db.collection('member_info').find().sort({ id: -1 }).limit(1).toArray();
     let nextId = 1000;
-    if (parsedData.members.length > 0) {
-      const highestId = Math.max(
-        ...parsedData.members.map((m) => Number(m.id) || 0)
-      );
-      nextId = highestId + 1;
+    if (maxMember.length > 0) {
+      nextId = maxMember[0].id + 1;
     }
 
     const newMember = {
@@ -266,20 +208,16 @@ router.post("/member-registration", (req, res, next) => {
           .filter((line) => line) || [],
     };
 
-    parsedData.members.push(newMember);
-
-    fs.writeFile(filePath, JSON.stringify(parsedData, null, 2), (err) => {
-      if (err) {
-        console.error("Error writing clubinfo.json:", err);
-        return res.status(500).send("Internal Server Error");
-      }
-      res.redirect(`/member/${newMember.id}`);
-    });
-  });
+    await db.collection('member_info').insertOne(newMember);
+    res.redirect(`/member/${newMember.id}`);
+  } catch (err) {
+    console.error("Error saving member:", err);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 /* POST attendance data. */
-router.post("/attendance", (req, res) => {
+router.post("/attendance", async (req, res) => {
   const selectedDate = req.body.selectedDate;
   const attendanceData = req.body.attendance;
 
@@ -305,52 +243,37 @@ router.post("/attendance", (req, res) => {
 
   const uniqueSelectedMemberIds = [...new Set(selectedMemberIds)];
 
-  const filePath = path.join(__dirname, "../data/clubinfo.json");
-  fs.readFile(filePath, "utf8", (err, jsonString) => {
-    if (err) {
-      console.error("Error reading clubinfo.json:", err);
-      return res.status(500).send("Internal Server Error");
-    }
-
-    let parsedData;
-    try {
-      parsedData = JSON.parse(jsonString);
-    } catch (parseErr) {
-      console.error("Error parsing JSON:", parseErr);
-      return res.status(500).send("Internal Server Error");
-    }
-
-    parsedData.members = parsedData.members.map((member) => {
-      const memberId = String(member.id);
-      const attendanceList = Array.isArray(member.attendance)
-        ? [...member.attendance]
-        : [];
-
-      if (uniqueSelectedMemberIds.includes(memberId)) {
+  try {
+    const db = await connectDB();
+    let savedCount = 0;
+    for (const memberId of uniqueSelectedMemberIds) {
+      const member = await db.collection('member_info').findOne({ id: parseInt(memberId, 10) });
+      if (member) {
+        const attendanceList = Array.isArray(member.attendance) ? [...member.attendance] : [];
         if (!attendanceList.includes(selectedDate)) {
           attendanceList.push(selectedDate);
+          await db.collection('member_info').updateOne({ id: parseInt(memberId, 10) }, { $set: { attendance: attendanceList } });
+          savedCount++;
         }
-      } else {
+      }
+    }
+    // For absent members, remove the date if present
+    const allMembers = await db.collection('member_info').find().toArray();
+    for (const member of allMembers) {
+      if (!uniqueSelectedMemberIds.includes(String(member.id))) {
+        const attendanceList = Array.isArray(member.attendance) ? [...member.attendance] : [];
         const dateIndex = attendanceList.indexOf(selectedDate);
         if (dateIndex !== -1) {
           attendanceList.splice(dateIndex, 1);
+          await db.collection('member_info').updateOne({ id: member.id }, { $set: { attendance: attendanceList } });
         }
       }
-
-      return {
-        ...member,
-        attendance: attendanceList,
-      };
-    });
-
-    fs.writeFile(filePath, JSON.stringify(parsedData, null, 2), (writeErr) => {
-      if (writeErr) {
-        console.error("Error writing clubinfo.json:", writeErr);
-        return res.status(500).send("Internal Server Error");
-      }
-      return res.redirect(`/attendance?saved=${uniqueSelectedMemberIds.length}`);
-    });
-  });
+    }
+    return res.redirect(`/attendance?saved=${savedCount}`);
+  } catch (err) {
+    console.error("Error updating attendance:", err);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 module.exports = router;
